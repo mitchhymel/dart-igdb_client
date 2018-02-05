@@ -1,6 +1,7 @@
+import 'filter.dart';
 
 class IGDBRequestParameters {
-  final List<String> filters;
+  final List<Filter> filters;
   final List<String> ids;
   final List<String> fields;
   final String expand;

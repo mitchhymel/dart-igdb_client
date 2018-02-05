@@ -30,7 +30,7 @@ class IGDBClient {
     if (params.filters != null) {
       List<String> urlEncodedFilters = new List<String>();
       params.filters.forEach((filter) {
-        String result = Uri.encodeQueryComponent(filter);
+        String result = '&filter' + Uri.encodeQueryComponent(filter.toString());
         result = result.replaceAll('%3D', '=');
         urlEncodedFilters.add(result);
       });
@@ -41,7 +41,7 @@ class IGDBClient {
     String query = (params.ids == null ? '' : params.ids.join(''))
         + (params.search == null ? '?' : '?search=${Uri.encodeFull(params.search)}&')
         + (params.fields == null ? 'fields=*' : 'fields=' + params.fields.join(','))
-        + (params.filters == null ? '' : '&filter' + filtersString)
+        + (params.filters == null ? '' : filtersString)
         + (params.expand == null ? '' : '&expand=' + params.expand)
         + (params.order == null ? '' : '&order=' + params.order)
         + (params.limit == null ? '' : '&limit=' + params.limit.toString())
@@ -54,6 +54,7 @@ class IGDBClient {
 
   Future<List> requestByEndpoint(Endpoint endpoint, IGDBRequestParameters params) async {
     String url = _buildRequestUrl(endpoint.value, params);
+    print(url);
     return await _makeRequest(url);
   }
 
