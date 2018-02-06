@@ -68,7 +68,7 @@ class Genres {
   };
 
   static Genres fromInt(int id) {
-    return _map.containsKey(id) ? _map[id] : NONE;
+    return _map[id] ?? NONE;
   }
 }
 
