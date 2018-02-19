@@ -70,6 +70,18 @@ class Genres {
   static Genres fromInt(int id) {
     return _map[id] ?? NONE;
   }
+
+  static List<Genres> listFromMap(Map map) {
+    List<Genres> result = new List<Genres>();
+    List<int> genres = map['genres'];
+    if (genres != null) {
+      for (int id in genres) {
+        result.add(Genres.fromInt(id));
+      }
+    }
+
+    return result;
+  }
 }
 
 class Genre {

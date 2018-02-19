@@ -13,13 +13,13 @@ main() async {
       MY_API_KEY
   );
 
-  List games = await _igdbClient.games(new IGDBRequestParameters(
+  List games = await _igdbClient.games(new RequestParameters(
     limit: 3
   ));
 
   prettyPrint(games[0]);
 
-  List genres = await _igdbClient.genres(new IGDBRequestParameters(
+  List genres = await _igdbClient.genres(new RequestParameters(
     limit: 3,
   ));
 

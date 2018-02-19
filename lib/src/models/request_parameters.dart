@@ -1,6 +1,6 @@
 import 'filter.dart';
 
-class IGDBRequestParameters {
+class RequestParameters {
   final List<Filter> filters;
   final List<String> ids;
   final List<String> fields;
@@ -11,7 +11,7 @@ class IGDBRequestParameters {
   final int scroll;
   final int offset;
 
-  const IGDBRequestParameters({
+  const RequestParameters({
     this.filters,
     this.ids,
     this.fields,

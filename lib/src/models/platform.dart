@@ -85,6 +85,18 @@ class Platforms {
     return _map[id] ?? NONE;
   }
 
+  static List<Platforms> listFromMap(Map map) {
+    List<Platforms> result = new List<Platforms>();
+    List<int> platforms = map['platforms'];
+    if (platforms != null) {
+      for (int id in platforms) {
+        result.add(Platforms.fromInt(id));
+      }
+    }
+
+    return result;
+  }
+
 }
 
 class Platform {
