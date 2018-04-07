@@ -1,5 +1,4 @@
 import 'package:igdb_client/igdb_client.dart';
-import 'dart:async';
 import 'dart:convert';
 
 import 'api_key.dart';

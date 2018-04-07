@@ -43,7 +43,7 @@ class Image {
     );
   }
 
-  static List<Image> listFromMapList(List<Map> maps) {
+  static List<Image> listFromMapList(List<dynamic> maps) {
     if (maps != null) {
       return maps.map((map) => fromMap(map)).toList();
     }

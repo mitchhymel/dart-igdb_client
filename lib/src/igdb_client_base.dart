@@ -11,7 +11,7 @@ class IGDBClient {
 
   IGDBClient(this._userAgent, this._apiUrl, this._apiKey) {}
 
-  Future<List> _makeRequest(String url) async {
+  Future<List<dynamic>> _makeRequest(String url) async {
     var uri = Uri.parse(url);
     var httpClient = new HttpClient();
     var request = await httpClient.getUrl(uri);
@@ -20,7 +20,7 @@ class IGDBClient {
       ..headers.add('Accept', 'application/json');
     var resp = await request.close();
     var responseBody = await resp.transform(UTF8.decoder).join();
-    List data = JSON.decode(responseBody);
+    List<dynamic> data = json.decode(responseBody);
     return data;
   }
 
@@ -51,97 +51,97 @@ class IGDBClient {
     // return query;
   }
 
-  Future<List> requestByEndpoint(Endpoints endpoint, RequestParameters params) async {
+  Future<List<dynamic>> requestByEndpoint(Endpoints endpoint, RequestParameters params) async {
     String url = _buildRequestUrl(endpoint.value, params);
     print(url);
     return await _makeRequest(url);
   }
 
-  Future<List> characters(RequestParameters params) async {
+  Future<List<dynamic>> characters(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.CHARACTERS, params);
   }
 
-  Future<List> collections(RequestParameters params) async {
+  Future<List<dynamic>> collections(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.COLLECTIONS, params);
   }
 
-  Future<List> companies(RequestParameters params) async {
+  Future<List<dynamic>> companies(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.COMPANIES, params);
   }
 
-  Future<List> credits(RequestParameters params) async {
+  Future<List<dynamic>> credits(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.CREDITS, params);
   }
 
-  Future<List> feeds(RequestParameters params) async {
+  Future<List<dynamic>> feeds(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.FEEDS, params);
   }
 
-  Future<List> franchises(RequestParameters params) async {
+  Future<List<dynamic>> franchises(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.FRANCHISES, params);
   }
 
-  Future<List> gameEngines(RequestParameters params) async {
+  Future<List<dynamic>> gameEngines(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.GAME_ENGINES, params);
   }
 
-  Future<List> gameModes(RequestParameters params) async {
+  Future<List<dynamic>> gameModes(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.GAME_MODES, params);
   }
 
-  Future<List> games(RequestParameters params) async {
+  Future<List<dynamic>> games(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.GAMES, params);
   }
 
-  Future<List> genres(RequestParameters params) async {
+  Future<List<dynamic>> genres(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.GENRES, params);
   }
 
-  Future<List> keywords(RequestParameters params) async {
+  Future<List<dynamic>> keywords(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.KEYWORDS, params);
   }
 
-  Future<List> pages(RequestParameters params) async {
+  Future<List<dynamic>> pages(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PAGES, params);
   }
 
-  Future<List> people(RequestParameters params) async {
+  Future<List<dynamic>> people(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PEOPLE, params);
   }
 
-  Future<List> platforms(RequestParameters params) async {
+  Future<List<dynamic>> platforms(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PLATFORMS, params);
   }
 
-  Future<List> playerPerspectives(RequestParameters params) async {
+  Future<List<dynamic>> playerPerspectives(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PLAYER_PERSPECTIVES, params);
   }
 
-  Future<List> pulseGroups(RequestParameters params) async {
+  Future<List<dynamic>> pulseGroups(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PULSE_GROUPS, params);
   }
 
-  Future<List> pulseSources(RequestParameters params) async {
+  Future<List<dynamic>> pulseSources(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PULSE_SOURCES, params);
   }
 
-  Future<List> pulses(RequestParameters params) async {
+  Future<List<dynamic>> pulses(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.PULSES, params);
   }
 
-  Future<List> releaseDates(RequestParameters params) async {
+  Future<List<dynamic>> releaseDates(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.RELEASE_DATES, params);
   }
 
-  Future<List> reviews(RequestParameters params) async {
+  Future<List<dynamic>> reviews(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.REVIEWS, params);
   }
 
-  Future<List> themes(RequestParameters params) async {
+  Future<List<dynamic>> themes(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.THEMES, params);
   }
 
-  Future<List> titles(RequestParameters params) async {
+  Future<List<dynamic>> titles(RequestParameters params) async {
     return await requestByEndpoint(Endpoints.TITLES, params);
   }
 }

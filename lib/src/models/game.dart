@@ -22,33 +22,33 @@ class Game {
   final int totalRatingCount;
   final int game; // expandable
   final int versionParent;
-  final List<int> developers; //expandable
-  final List<int> publishers; //expandable
-  final List<int> gameEngines; //expandable
+  final List<dynamic> developers; //expandable
+  final List<dynamic> publishers; //expandable
+  final List<dynamic> gameEngines; //expandable
   final int category;
   final Map timeToBeat;
-  final List<int> playerPerspectives;
-  final List<int> gameModes;
-  final List<int> keywords;
-  final List<int> themes;
+  final List<dynamic> playerPerspectives;
+  final List<dynamic> gameModes;
+  final List<dynamic> keywords;
+  final List<dynamic> themes;
   final List<Genres> genres;
   final List<Platforms> platforms;
   final DateTime firstReleaseDate;
   final int status;
   final List<ReleaseDate> releaseDates;
-  final List<Map> alternativeNames;
+  final List<dynamic> alternativeNames;
   final List<Image> screenshots;
-  final List<Map> videos;
+  final List<dynamic> videos;
   final Image cover;
   final Map esrb;
   final Map pegi;
-  final List<Map> websites;
-  final List<int> tags;
-  final List<int> dlcs; //expandable
-  final List<int> expansions; //expandable
-  final List<int> standaloneExpansions; //expandable
-  final List<int> bundles; //expandable
-  final List<int> games; //expandable
+  final List<dynamic> websites;
+  final List<dynamic> tags;
+  final List<dynamic> dlcs; //expandable
+  final List<dynamic> expansions; //expandable
+  final List<dynamic> standaloneExpansions; //expandable
+  final List<dynamic> bundles; //expandable
+  final List<dynamic> games; //expandable
   final Map external;
 
   Game({
@@ -156,7 +156,7 @@ class Game {
     );
   }
 
-  static List<Game> listFromMapList(List<Map> maps) {
+  static List<Game> listFromMapList(List<dynamic> maps) {
     if (maps != null) {
       return maps.map((m) => fromMap(m)).toList();
     }
