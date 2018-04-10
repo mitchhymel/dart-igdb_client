@@ -38,7 +38,7 @@ class Game {
   final List<ReleaseDate> releaseDates;
   final List<dynamic> alternativeNames;
   final List<Image> screenshots;
-  final List<dynamic> videos;
+  final List<Video> videos;
   final Image cover;
   final Map esrb;
   final Map pegi;
@@ -141,7 +141,7 @@ class Game {
       releaseDates: ReleaseDate.listFromMap(map, expandGame: false),
       alternativeNames: map['alternative_names'],
       screenshots: Image.listFromMapList(map['screenshots']),
-      videos: map['videos'],
+      videos: Video.listFromMapList(map['videos']),
       cover: Image.fromMap(map['cover']),
       esrb: map['esrb'],
       pegi: map['pegi'],

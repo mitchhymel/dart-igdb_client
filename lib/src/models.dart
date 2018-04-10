@@ -8,6 +8,7 @@ export 'models/release_date.dart';
 export 'models/endpoint.dart';
 export 'models/game.dart';
 export 'models/image.dart';
+export 'models/video.dart';
 
 DateTime dateTimeFromMsecSinceEpoch(int value) {
   if (value == null) {
