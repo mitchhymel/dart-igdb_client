@@ -37,9 +37,9 @@ class Game {
   final int status;
   final List<ReleaseDate> releaseDates;
   final List<dynamic> alternativeNames;
-  final List<Image> screenshots;
+  final List<IGDBImage> screenshots;
   final List<Video> videos;
-  final Image cover;
+  final IGDBImage cover;
   final Map esrb;
   final Map pegi;
   final List<dynamic> websites;
@@ -140,9 +140,9 @@ class Game {
       status: map['status'],
       releaseDates: ReleaseDate.listFromMap(map, expandGame: false),
       alternativeNames: map['alternative_names'],
-      screenshots: Image.listFromMapList(map['screenshots']),
+      screenshots: IGDBImage.listFromMapList(map['screenshots']),
       videos: Video.listFromMapList(map['videos']),
-      cover: Image.fromMap(map['cover']),
+      cover: IGDBImage.fromMap(map['cover']),
       esrb: map['esrb'],
       pegi: map['pegi'],
       websites: map['websites'],
