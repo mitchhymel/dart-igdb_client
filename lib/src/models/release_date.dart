@@ -30,6 +30,11 @@ class ReleaseDate {
     this.human
   });
 
+  @override
+  String toString() {
+    return this.toMap().toString();
+  }
+
   static ReleaseDate fromMap(Map map, {bool expandGame = false}) {
     // release dates allow expanding of game
     // if the game is just an int, expand was not used,
@@ -76,5 +81,22 @@ class ReleaseDate {
     }
 
     return result;
+  }
+
+  Map toMap() {
+    return {
+      'id': id,
+      'game': game,
+      'date': date,
+      'platform': platform,
+      'region': region,
+      'gameExpanded': gameExpanded,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'category': category,
+      'y': y,
+      'm': m,
+      'human': human,
+    };
   }
 }

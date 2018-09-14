@@ -38,5 +38,20 @@ class Regions {
     return _map[id] ?? NONE;
   }
 
+  static List<Regions> all() {
+    return _map.values.toList();
+  }
+
+  @override
+  String toString() {
+    return this.toMap().toString();
+  }
+
+  Map toMap() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
 
 }

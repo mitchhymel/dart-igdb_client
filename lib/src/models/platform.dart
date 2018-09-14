@@ -97,6 +97,18 @@ class Platforms {
     return result;
   }
 
+  @override
+  String toString() {
+    return this.toMap().toString();
+  }
+
+  Map toMap() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+
 }
 
 class Platform {
