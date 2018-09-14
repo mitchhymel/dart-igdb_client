@@ -19,7 +19,7 @@ class IGDBClient {
       ..headers.add('User-Agent', _userAgent)
       ..headers.add('Accept', 'application/json');
     var resp = await request.close();
-    var responseBody = await resp.transform(UTF8.decoder).join();
+    var responseBody = await resp.transform(utf8.decoder).join();
     List<dynamic> data = json.decode(responseBody);
     return data;
   }
