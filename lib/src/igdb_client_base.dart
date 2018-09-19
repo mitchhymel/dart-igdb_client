@@ -5,18 +5,18 @@ import 'package:igdb_client/src/models.dart';
 
 class IGDBClient {
 
-  final String _apiKey;
-  final String _userAgent;
-  final String _apiUrl;
+  final String apiKey;
+  final String userAgent;
+  final String apiUrl;
 
-  IGDBClient(this._userAgent, this._apiUrl, this._apiKey) {}
+  IGDBClient(this.userAgent, this.apiUrl, this.apiKey) {}
 
   Future<List<dynamic>> _makeRequest(String url) async {
     var uri = Uri.parse(url);
     var httpClient = new HttpClient();
     var request = await httpClient.getUrl(uri);
-    request..headers.add('user-key', _apiKey)
-      ..headers.add('User-Agent', _userAgent)
+    request..headers.add('user-key', apiKey)
+      ..headers.add('User-Agent', userAgent)
       ..headers.add('Accept', 'application/json');
     var resp = await request.close();
     var responseBody = await resp.transform(utf8.decoder).join();
@@ -47,7 +47,7 @@ class IGDBClient {
         + (params.offset == null ? '' : '&offset=' + params.offset.toString())
         + (params.scroll == null ? '' : '&scroll=' + params.scroll.toString());
 
-    return '$_apiUrl/$endpoint/$query';
+    return '$apiUrl/$endpoint/$query';
     // return query;
   }
 

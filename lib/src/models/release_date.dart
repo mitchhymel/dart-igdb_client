@@ -83,6 +83,15 @@ class ReleaseDate {
     return result;
   }
 
+  static List<ReleaseDate> listFromMapList(List<dynamic> list,
+      {bool expandGame=false}) {
+    List<ReleaseDate> result = new List<ReleaseDate>();
+    list.forEach((date) =>
+        result.add(ReleaseDate.fromMap(date, expandGame: expandGame))
+    );
+    return result;
+  }
+
   Map toMap() {
     return {
       'id': id,
