@@ -3,9 +3,8 @@
 A Dart library for using the IGDB.com API
 https://igdb.github.io/api/about/welcome/
 
-
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+Uses IGDB API v3
+https://api-docs.igdb.com/
 
 ## Usage
 
