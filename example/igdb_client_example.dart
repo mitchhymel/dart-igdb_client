@@ -8,17 +8,16 @@ main() async {
 
   var _igdbClient = new IGDBClient(
       MY_USER_AGENT,
-      IGDB_API_URL,
       MY_API_KEY
   );
 
-  List games = await _igdbClient.games(new RequestParameters(
+  List games = await _igdbClient.games(new IGDBRequestParameters(
     limit: 3
   ));
 
   prettyPrint(games[0]);
 
-  List genres = await _igdbClient.genres(new RequestParameters(
+  List genres = await _igdbClient.genres(new IGDBRequestParameters(
     limit: 3,
   ));
 

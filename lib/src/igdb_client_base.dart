@@ -1,147 +1,143 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:igdb_client/src/models.dart';
+import 'package:igdb_client/src/enums/enums.dart';
+import 'package:igdb_client/src/request_parameters.dart';
 
 class IGDBClient {
 
   final String apiKey;
   final String userAgent;
-  final String apiUrl;
+  final String apiUrl = "https://api-v3.igdb.com";
+  final bool debugLog;
 
-  IGDBClient(this.userAgent, this.apiUrl, this.apiKey) {}
+  IGDBClient(this.userAgent, this.apiKey, {this.debugLog}) {}
 
-  Future<List<dynamic>> _makeRequest(String url) async {
+  log(String text) {
+    if (debugLog) {
+      print('IGDBClient: $text');
+    }
+  }
+
+  Future<List<dynamic>> makeRequest(String url, String body) async {
     var uri = Uri.parse(url);
     var httpClient = new HttpClient();
-    var request = await httpClient.getUrl(uri);
+    var request = await httpClient.postUrl(uri);
     request..headers.add('user-key', apiKey)
       ..headers.add('User-Agent', userAgent)
-      ..headers.add('Accept', 'application/json');
+      ..headers.add('Accept', 'application/json')
+      ..write(body);
+
+    log('$uri\n$body');
+
     var resp = await request.close();
     var responseBody = await resp.transform(utf8.decoder).join();
+
+    log('responsebody=$responseBody');
+
     List<dynamic> data = json.decode(responseBody);
     return data;
   }
 
-  String _buildRequestUrl(String endpoint, RequestParameters params) {
-    String filtersString;
-    if (params.filters != null) {
-      List<String> urlEncodedFilters = new List<String>();
-      params.filters.forEach((filter) {
-        String result = '&filter' + Uri.encodeQueryComponent(filter.toString());
-        result = result.replaceAll('%3D', '=');
-        urlEncodedFilters.add(result);
-      });
-
-      filtersString = urlEncodedFilters.join('');
-    }
-
-    String query = (params.ids == null ? '' : params.ids.join(','))
-        + (params.search == null ? '?' : '?search=${Uri.encodeFull(params.search)}&')
-        + (params.fields == null ? 'fields=*' : 'fields=' + params.fields.join(','))
-        + (params.filters == null ? '' : filtersString)
-        + (params.expand == null ? '' : '&expand=' + params.expand)
-        + (params.order == null ? '' : '&order=' + params.order)
-        + (params.limit == null ? '' : '&limit=' + params.limit.toString())
-        + (params.offset == null ? '' : '&offset=' + params.offset.toString())
-        + (params.scroll == null ? '' : '&scroll=' + params.scroll.toString());
-
-    return '$apiUrl/$endpoint/$query';
-    // return query;
+  Future<List<dynamic>> requestByEndpoint(IGDBEndpoints endpoint, IGDBRequestParameters params) async {
+    return await makeRequest("${apiUrl}/${endpoint.toString()}", params.toBody());
   }
 
-  Future<List<dynamic>> requestByEndpoint(Endpoints endpoint, RequestParameters params) async {
-    String url = _buildRequestUrl(endpoint.value, params);
-    print(url);
-    return await _makeRequest(url);
+  Future<List<dynamic>> characters(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.CHARACTERS, params);
   }
 
-  Future<List<dynamic>> characters(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.CHARACTERS, params);
+  Future<List<dynamic>> collections(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.COLLECTIONS, params);
   }
 
-  Future<List<dynamic>> collections(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.COLLECTIONS, params);
+  Future<List<dynamic>> companies(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.COMPANIES, params);
   }
 
-  Future<List<dynamic>> companies(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.COMPANIES, params);
+  Future<List<dynamic>> credits(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.CREDITS, params);
   }
 
-  Future<List<dynamic>> credits(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.CREDITS, params);
+  Future<List<dynamic>> feeds(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.FEEDS, params);
   }
 
-  Future<List<dynamic>> feeds(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.FEEDS, params);
+  Future<List<dynamic>> franchises(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.FRANCHISES, params);
   }
 
-  Future<List<dynamic>> franchises(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.FRANCHISES, params);
+  Future<List<dynamic>> gameEngines(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.GAME_ENGINES, params);
   }
 
-  Future<List<dynamic>> gameEngines(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.GAME_ENGINES, params);
+  Future<List<dynamic>> gameModes(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.GAME_MODES, params);
   }
 
-  Future<List<dynamic>> gameModes(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.GAME_MODES, params);
+  Future<List<dynamic>> games(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.GAMES, params);
   }
 
-  Future<List<dynamic>> games(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.GAMES, params);
+  Future<List<dynamic>> genres(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.GENRES, params);
   }
 
-  Future<List<dynamic>> genres(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.GENRES, params);
+  Future<List<dynamic>> keywords(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.KEYWORDS, params);
   }
 
-  Future<List<dynamic>> keywords(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.KEYWORDS, params);
+  Future<List<dynamic>> pages(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PAGES, params);
   }
 
-  Future<List<dynamic>> pages(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PAGES, params);
+  Future<List<dynamic>> people(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PEOPLE, params);
   }
 
-  Future<List<dynamic>> people(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PEOPLE, params);
+  Future<List<dynamic>> platforms(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PLATFORMS, params);
   }
 
-  Future<List<dynamic>> platforms(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PLATFORMS, params);
+  Future<List<dynamic>> playerPerspectives(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PLAYER_PERSPECTIVES, params);
   }
 
-  Future<List<dynamic>> playerPerspectives(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PLAYER_PERSPECTIVES, params);
+  Future<List<dynamic>> pulseGroups(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PULSE_GROUPS, params);
   }
 
-  Future<List<dynamic>> pulseGroups(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PULSE_GROUPS, params);
+  Future<List<dynamic>> pulseSources(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PULSE_SOURCES, params);
   }
 
-  Future<List<dynamic>> pulseSources(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PULSE_SOURCES, params);
+  Future<List<dynamic>> pulses(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.PULSES, params);
   }
 
-  Future<List<dynamic>> pulses(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.PULSES, params);
+  Future<List<dynamic>> releaseDates(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.RELEASE_DATES, params);
   }
 
-  Future<List<dynamic>> releaseDates(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.RELEASE_DATES, params);
+  Future<List<dynamic>> reviews(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.REVIEWS, params);
   }
 
-  Future<List<dynamic>> reviews(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.REVIEWS, params);
+  Future<List<dynamic>> search(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.SEARCH, params);
   }
 
-  Future<List<dynamic>> themes(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.THEMES, params);
+  Future<List<dynamic>> themes(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.THEMES, params);
   }
 
-  Future<List<dynamic>> titles(RequestParameters params) async {
-    return await requestByEndpoint(Endpoints.TITLES, params);
+  Future<List<dynamic>> titles(IGDBRequestParameters params) async {
+    return await requestByEndpoint(IGDBEndpoints.TITLES, params);
+  }
+
+  static String getImageUrl(String imageId, IGDBImageSizes size,
+      {bool isRetina=false}) {
+    String sizeStr = isRetina ? '${size.name}_2x' : '${size.name}';
+    return 'https://images.igdb.com/igdb/image/upload/t_${sizeStr}/${imageId}.jpg';
   }
 }
