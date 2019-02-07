@@ -53,7 +53,7 @@ class IGDBRequestParameters {
     }
 
     if (ids != null && ids.length > 0) {
-      result += 'fields (${ids.join(',')});';
+      result += 'where id = (${ids.join(',')});';
     }
 
     if (filters != null && filters.length > 0) {

@@ -9,13 +9,21 @@ class IGDBClient {
   final String apiKey;
   final String userAgent;
   final String apiUrl = "https://api-v3.igdb.com";
-  final bool debugLog;
+  final bool printRequests;
+  final bool printResponses;
 
-  IGDBClient(this.userAgent, this.apiKey, {this.debugLog}) {}
+  IGDBClient(this.userAgent, this.apiKey,
+      {this.printRequests=false, this.printResponses=false}) {}
 
-  log(String text) {
-    if (debugLog) {
-      print('IGDBClient: $text');
+  logRequest(String text) {
+    if (printRequests) {
+      print('IGDBClient Request: $text');
+    }
+  }
+
+  logResponse(String text) {
+    if (printResponses) {
+      print('IGDBClient Response: $text');
     }
   }
 
@@ -28,12 +36,12 @@ class IGDBClient {
       ..headers.add('Accept', 'application/json')
       ..write(body);
 
-    log('$uri\n$body');
+    logRequest('$uri\n$body');
 
     var resp = await request.close();
     var responseBody = await resp.transform(utf8.decoder).join();
 
-    log('responsebody=$responseBody');
+    logResponse(responseBody);
 
     List<dynamic> data = json.decode(responseBody);
     return data;

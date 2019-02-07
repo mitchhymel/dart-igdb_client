@@ -21,7 +21,7 @@ class IGDBRegions {
   static const IGDBRegions CHINA = const IGDBRegions._private('China', _chinaId);
   static const IGDBRegions ASIA = const IGDBRegions._private('Asia', _asiaId);
   static const IGDBRegions WORLDWIDE = const IGDBRegions._private('Worldwide', _worldwideId);
-  static const IGDBRegions NONE = const IGDBRegions._private('None', 0);
+  static const IGDBRegions NONE = const IGDBRegions._private('None', null);
 
   static const Map<int, IGDBRegions> _map = const {
     _europeId: EUROPE,
@@ -35,7 +35,14 @@ class IGDBRegions {
   };
 
   static IGDBRegions fromInt(int id) {
-    return _map[id] ?? NONE;
+    if (id == null) {
+      return WORLDWIDE;
+    }
+    else if (_map[id] == null) {
+      return NONE;
+    }
+
+    return _map[id];
   }
 
   static List<IGDBRegions> all() {
