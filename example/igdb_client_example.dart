@@ -1,30 +1,25 @@
 import 'package:igdb_client/igdb_client.dart';
-import 'dart:convert';
 
 import 'api_key.dart';
 
+var client = new IGDBClient(
+    MY_USER_AGENT,
+    MY_API_KEY,
+);
+
 main() async {
-  print ('hello world');
 
-  var _igdbClient = new IGDBClient(
-      MY_USER_AGENT,
-      MY_API_KEY
-  );
-
-  List games = await _igdbClient.games(new IGDBRequestParameters(
-    limit: 3
+  
+  var gamesResponse = await client.games(IGDBRequestParameters(
+    limit: 5,
+    fields: ['name', 'rating', 'time_to_beat', 'release_dates'],
+    order: 'rating desc',
   ));
 
-  prettyPrint(games[0]);
+  print(IGDBClient.getPrettyStringFromMap(gamesResponse.toMap()));
 
-  List genres = await _igdbClient.genres(new IGDBRequestParameters(
-    limit: 3,
-  ));
+  
 
-  prettyPrint(genres[0]);
+  // print(response.toPrettyString());
 }
 
-prettyPrint(Map obj) {
-  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-  print(encoder.convert(obj));
-}

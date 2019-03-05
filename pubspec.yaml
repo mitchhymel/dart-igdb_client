@@ -1,8 +1,8 @@
 name: igdb_client
-description: A starting point for Dart libraries or applications.
+description: A dart library for IGDB API
 version: 0.0.1
-#homepage: https://www.example.com
-#author: Mitchell <email@example.com>
+homepage: https://github.com/mitchhymel/dart-igdb_client
+author: mitchhymel
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

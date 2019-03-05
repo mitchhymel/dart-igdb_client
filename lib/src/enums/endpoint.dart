@@ -20,9 +20,11 @@ class IGDBEndpoints {
   static const IGDBEndpoints PULSES = const IGDBEndpoints._private('pulses');
   static const IGDBEndpoints RELEASE_DATES = const IGDBEndpoints._private('release_dates');
   static const IGDBEndpoints REVIEWS = const IGDBEndpoints._private('reviews');
+  static const IGDBEndpoints SCREENSHOTS = const IGDBEndpoints._private('screenshots');
   static const IGDBEndpoints SEARCH = const IGDBEndpoints._private('search');
   static const IGDBEndpoints THEMES = const IGDBEndpoints._private('themes');
   static const IGDBEndpoints TITLES = const IGDBEndpoints._private('titles');
+  static const IGDBEndpoints TIME_TO_BEATS = const IGDBEndpoints._private('time_to_beats');
 
   final String value;
   const IGDBEndpoints._private(this.value);

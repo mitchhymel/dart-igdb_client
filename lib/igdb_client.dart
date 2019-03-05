@@ -1,7 +1,9 @@
 
 library igdb_client;
 
-export 'src/request_parameters.dart';
-export 'src/igdb_client_base.dart';
+export 'package:igdb_client/src/request_parameters.dart';
+export 'package:igdb_client/src/igdb_client.dart';
 export 'package:igdb_client/src/enums/enums.dart';
+export 'package:igdb_client/src/igdb_response.dart';
+export 'package:igdb_client/src/igdb_logger.dart';
 
