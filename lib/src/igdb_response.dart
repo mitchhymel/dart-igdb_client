@@ -1,8 +1,22 @@
 import 'dart:convert';
 
 class IGDBResponse {
+
+  /** 
+   * Http status code of the request
+   */
   final int status;
+
+  /**
+   * Object containing error information about the request. Will be null if
+   * the request was successful.
+   */
   final dynamic error;
+
+  /**
+   * Object containing the resulting objects returned from IGDB's API. Will 
+   * be null if the request encountered an error.
+   */
   final List<dynamic> data;
 
   IGDBResponse(this.status, this.error, this.data);

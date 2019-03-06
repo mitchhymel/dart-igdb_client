@@ -1,12 +1,12 @@
 
 class IGDBRequestParameters {
-  final String filters; // ref https://api-docs.igdb.com/?shell#filters
+  final String filters; // https://api-docs.igdb.com/#filters
   final List<String> ids;
   final List<String> fields;
   final int limit;
-  final String order;
+  final String order; // https://api-docs.igdb.com/#sorting
   final String search;
-  final int offset;
+  final int offset; // https://api-docs.igdb.com/#pagination
 
   const IGDBRequestParameters({
     this.filters,
