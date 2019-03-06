@@ -11,6 +11,11 @@ what exactly you can do with the API.
 
 ## Usage
 
+To start using this, just add it to your pubspec:
+
+[![pub package](https://img.shields.io/pub/v/igdb_client.svg)](https://pub.dartlang.org/packages/igdb_client)
+
+
 See example/igdb_client_example.dart for a more in depth example of some
 of the things you can do with this client. Otherwise a simple example can be
 found below.
