@@ -20,7 +20,7 @@ class IGDBRequestParameters {
 
   IGDBRequestParameters copyWith({
     String filters,
-    List<String> ids,
+    List<int> ids,
     List<String> fields,
     int limit,
     String order,
