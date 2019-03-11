@@ -29,6 +29,11 @@ main() async {
     order: 'date asc'
   ));
   printResponse(releaseResponse);
+
+  var gameIdResponse = await client.games(new IGDBRequestParameters(
+    ids: [43378],
+  ));
+  printResponse(gameIdResponse);
 }
 
 printResponse(IGDBResponse resp) {

@@ -1,7 +1,7 @@
 
 class IGDBRequestParameters {
   final String filters; // https://api-docs.igdb.com/#filters
-  final List<String> ids;
+  final List<int> ids;
   final List<String> fields;
   final int limit;
   final String order; // https://api-docs.igdb.com/#sorting
