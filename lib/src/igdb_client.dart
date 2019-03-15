@@ -98,6 +98,10 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.COMPANIES, params);
   }
 
+  Future<IGDBResponse> covers(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.COVERS, params);
+  }
+
   Future<IGDBResponse> credits(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.CREDITS, params);
   }
@@ -116,6 +120,10 @@ class IGDBClient {
 
   Future<IGDBResponse> gameModes(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.GAME_MODES, params);
+  }
+
+  Future<IGDBResponse> gameVideos(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.GAME_VIDEOS, params);
   }
 
   Future<IGDBResponse> games(IGDBRequestParameters params) async {
@@ -140,6 +148,10 @@ class IGDBClient {
 
   Future<IGDBResponse> platforms(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLATFORMS, params);
+  }
+
+  Future<IGDBResponse> platformLogos(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_LOGOS, params);
   }
 
   Future<IGDBResponse> playerPerspectives(IGDBRequestParameters params) async {
