@@ -9,7 +9,6 @@ var client = new IGDBClient(
 
 main() async {
 
-
   // Find games with 'infamous' in their name and return
   // the results' name and expand their release_dates and platforms.
   var gamesResponse = await client.games(new IGDBRequestParameters(
@@ -37,6 +36,6 @@ main() async {
 }
 
 printResponse(IGDBResponse resp) {
-  print(IGDBClient.getPrettyStringFromMap(resp.toMap()));
+  print(IGDBHelpers.getPrettyStringFromMap(resp.toMap()));
 }
 

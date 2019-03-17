@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:igdb_client/src/igdb_client.dart';
+import 'package:igdb_client/src/igdb_helpers.dart';
 import 'package:igdb_client/src/igdb_response.dart';
 
 /**
@@ -26,12 +26,12 @@ class IGDBConsoleLogger implements IGDBLogger {
     };
 
     print('IGDBClient Request:');
-    print(IGDBClient.getPrettyStringFromMap(map));
+    print(IGDBHelpers.getPrettyStringFromMap(map));
   }
 
   @override
   void logResponse(IGDBResponse response) {
     print('IGDBClient Response:');
-    print(IGDBClient.getPrettyStringFromMap(response.toMap()));
+    print(IGDBHelpers.getPrettyStringFromMap(response.toMap()));
   }
 }
