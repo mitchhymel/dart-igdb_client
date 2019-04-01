@@ -1,4 +1,3 @@
-
 class IGDBRequestParameters {
   final String filters; // https://api-docs.igdb.com/#filters
   final List<int> ids;

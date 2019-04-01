@@ -7,7 +7,7 @@ It is highly recommended to read through the IGDB documentation to understand
 what exactly you can do with the API.
 
 ## Limitations
-[IGDB user authentication](https://api-docs.igdb.com/#igdb-authentication) is not supported and I don't have any plans to support it.
+Premium features (including [IGDB user authentication](https://api-docs.igdb.com/#igdb-authentication)) are not supported and I don't currently have plans to add support for them as I don't have access to these.
 
 ## Usage
 

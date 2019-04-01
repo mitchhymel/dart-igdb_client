@@ -66,6 +66,7 @@ class IGDBClient {
     if (logger != null) {
       logger.logResponse(result);
     }
+
     return result;
   }
 
@@ -74,7 +75,7 @@ class IGDBClient {
    * 
    * Use this method if you are trying to call an endpoint that does not have
    * a specific method implemented in this client or there does not exist
-   * an [IDGBEndpoints] enum for it (e.g. achievements).
+   * an [IDGBEndpoints] enum for it.
    */
   Future<IGDBResponse> requestByPath(
     String path, IGDBRequestParameters params) async {
@@ -86,8 +87,36 @@ class IGDBClient {
     return await makeRequest("${apiUrl}/${endpoint.toString()}", params.toBody());
   }
 
+  Future<IGDBResponse> achievements(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.ACHIEVEMENTS, params);
+  }
+
+  Future<IGDBResponse> achievement_icons(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.ACHIEVEMENT_ICONS, params);
+  }
+
+  Future<IGDBResponse> ageRatings(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.AGE_RATINGS, params);
+  }
+
+  Future<IGDBResponse> ageRatingContentDescriptions(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.AGE_RATING_CONTENT_DESCRIPTIONS, params);
+  }
+
+  Future<IGDBResponse> alternativeNames(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.ALTERNATIVE_NAMES, params);
+  }
+
+  Future<IGDBResponse> artworks(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.ARTWORKS, params);
+  }
+
   Future<IGDBResponse> characters(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.CHARACTERS, params);
+  }
+
+  Future<IGDBResponse> characterMugShots(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.CHARACTER_MUG_SHOTS, params);
   }
 
   Future<IGDBResponse> collections(IGDBRequestParameters params) async {
@@ -98,12 +127,24 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.COMPANIES, params);
   }
 
+  Future<IGDBResponse> companyLogos(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.COMPANY_LOGOS, params);
+  }
+
+  Future<IGDBResponse> companyWebsites(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.COMPANY_WEBSITES, params);
+  }
+
   Future<IGDBResponse> covers(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.COVERS, params);
   }
 
   Future<IGDBResponse> credits(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.CREDITS, params);
+  }
+
+  Future<IGDBResponse> externalGames(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.EXTERNAL_GAMES, params);
   }
 
   Future<IGDBResponse> feeds(IGDBRequestParameters params) async {
@@ -114,8 +155,16 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.FRANCHISES, params);
   }
 
+  Future<IGDBResponse> games(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.GAMES, params);
+  }
+
   Future<IGDBResponse> gameEngines(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.GAME_ENGINES, params);
+  }
+
+  Future<IGDBResponse> gameEngineLogos(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.GAME_ENGINE_LOGOS, params);
   }
 
   Future<IGDBResponse> gameModes(IGDBRequestParameters params) async {
@@ -126,20 +175,48 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.GAME_VIDEOS, params);
   }
 
-  Future<IGDBResponse> games(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.GAMES, params);
+  Future<IGDBResponse> gameVersions(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.GAME_VERSIONS, params);
+  }
+
+  Future<IGDBResponse> gameVersionFeatures(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.GAME_VERSION_FEATURES, params);
+  }
+
+  Future<IGDBResponse> gameVersionFeatureValues(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.GAME_VERSION_FEATURE_VALUES, params);
   }
 
   Future<IGDBResponse> genres(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.GENRES, params);
   }
 
+  Future<IGDBResponse> involvedCompanies(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.INVOLVED_COMPANIES, params);
+  }
+
   Future<IGDBResponse> keywords(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.KEYWORDS, params);
   }
 
+  Future<IGDBResponse> multiplayerModes(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.MULTIPLAYER_MODES, params);
+  }
+
   Future<IGDBResponse> pages(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PAGES, params);
+  }
+
+  Future<IGDBResponse> pageBackgrounds(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PAGE_BACKGROUNDS, params);
+  }
+  
+  Future<IGDBResponse> pageLogos(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PAGE_LOGOS, params);
+  }
+  
+  Future<IGDBResponse> pageWebsites(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PAGE_WEBSITES, params);
   }
 
   Future<IGDBResponse> people(IGDBRequestParameters params) async {
@@ -153,9 +230,33 @@ class IGDBClient {
   Future<IGDBResponse> platformLogos(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLATFORM_LOGOS, params);
   }
+  
+  Future<IGDBResponse> platformVersions(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_VERSIONS, params);
+  }
+  
+  Future<IGDBResponse> platformVersionCompanies(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_VERSION_COMPANIES, params);
+  }
+  
+  Future<IGDBResponse> platformVersionReleaseDates(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_VERSION_RELEASE_DATES, params);
+  }
+  
+  Future<IGDBResponse> platformWebsites(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_WEBSITES, params);
+  }
 
   Future<IGDBResponse> playerPerspectives(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLAYER_PERSPECTIVES, params);
+  }
+  
+  Future<IGDBResponse> productFamilies(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PRODUCT_FAMILIES, params);
+  }
+
+  Future<IGDBResponse> pulses(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PULSES, params);
   }
 
   Future<IGDBResponse> pulseGroups(IGDBRequestParameters params) async {
@@ -166,8 +267,8 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.PULSE_SOURCES, params);
   }
 
-  Future<IGDBResponse> pulses(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PULSES, params);
+  Future<IGDBResponse> pulseUrls(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.PULSE_URLS, params);
   }
 
   Future<IGDBResponse> releaseDates(IGDBRequestParameters params) async {
@@ -186,28 +287,15 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.THEMES, params);
   }
 
+  Future<IGDBResponse> timeToBeats(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.TIME_TO_BEATS, params);
+  }
+
   Future<IGDBResponse> titles(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.TITLES, params);
   }
 
-  /**
-   * Helper method to get the igdb url to show an image provided
-   * its [imageId] and [size].
-   * Provide [isRetina] if you want to double the image resolution and
-   * [alphaChannel] if you know the image has an alpha in it (avoiding black background, for example).
-   */
-  static String getImageUrl(String imageId, IGDBImageSizes size,
-      {bool isRetina=false, bool alphaChannel=false}) {
-    String sizeStr = isRetina ? '${size.name}_2x' : '${size.name}';
-    String fileExtension = alphaChannel ? 'png' : 'jpg';
-    return 'https://images.igdb.com/igdb/image/upload/t_${sizeStr}/${imageId}.$fileExtension';
-  }
-
-  /**
-   * Helper method to print a map as json formatted with tabs
-   */
-  static String getPrettyStringFromMap(Map map) {
-    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    return encoder.convert(map);
+  Future<IGDBResponse> websites(IGDBRequestParameters params) async {
+    return await _requestByEndpoint(IGDBEndpoints.WEBSITES, params);
   }
 }
