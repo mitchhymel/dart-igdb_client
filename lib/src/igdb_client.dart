@@ -50,7 +50,7 @@ class IGDBClient {
     }
 
     var resp = await request.close();
-    var responseBody = await resp.transform(utf8.decoder).join();
+    var responseBody = await resp.cast<List<int>>().transform(utf8.decoder).join();
     
     var error = null;
     var data = null;

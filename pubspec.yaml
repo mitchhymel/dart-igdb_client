@@ -1,6 +1,6 @@
 name: igdb_client
 description: A dart library for IGDB API
-version: 0.0.4
+version: 0.0.4+1
 homepage: https://github.com/mitchhymel/dart-igdb_client
 author: Mitch Hymel <mitchell.hymel@gmail.com>
 
