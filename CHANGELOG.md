@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5
+- Updating for breaking change in http dependency
+- add support for alpha channel fo rimages
+
 ## 0.0.4
 - Added more endpoints and client methods for each
 - Added more platforms enums
