@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:igdb_client/src/enums/enums.dart';
@@ -38,30 +38,32 @@ class IGDBClient {
    */
   Future<IGDBResponse> makeRequest(String url, String body) async {
     var uri = Uri.parse(url);
-    var httpClient = new HttpClient();
-    var request = await httpClient.postUrl(uri);
-    request..headers.add('user-key', apiKey)
-      ..headers.add('User-Agent', userAgent)
-      ..headers.add('Accept', 'application/json')
-      ..write(body);
+    
+    var headers = {
+      'user-key': apiKey,
+      'User-Agent': userAgent,
+      'Accept': 'application/json'
+    };
 
     if (logger != null) {
-      logger.logRequest(request, body);
+      logger.logRequest(uri.toString(), headers, body);
     }
 
-    var resp = await request.close();
-    var responseBody = await resp.cast<List<int>>().transform(utf8.decoder).join();
-    
+    var response = await post(url, 
+      headers: headers,
+      body: body
+    );
+
     var error = null;
     var data = null;
-    if (resp.statusCode != 200) {
-      error = json.decode(responseBody);
+    if (response.statusCode != 200) {
+      error = json.decode(response.body);
     }
     else {
-      data = json.decode(responseBody);
+      data = json.decode(response.body);
     }
 
-    var result = new IGDBResponse(resp.statusCode, error, data);
+    var result = new IGDBResponse(response.statusCode, error, data);
 
     if (logger != null) {
       logger.logResponse(result);

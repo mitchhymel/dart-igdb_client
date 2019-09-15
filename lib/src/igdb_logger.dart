@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:igdb_client/src/igdb_helpers.dart';
 import 'package:igdb_client/src/igdb_response.dart';
 
@@ -8,20 +7,16 @@ import 'package:igdb_client/src/igdb_response.dart';
  * See [IGDBConsoleLogger] below as an example on how to implement.
  */
 abstract class IGDBLogger {
-  void logRequest(HttpClientRequest request, String body);
+  void logRequest(String uri, Map<String, String> headers, String body);
   void logResponse(IGDBResponse response);
 } 
 
 class IGDBConsoleLogger implements IGDBLogger {
   @override
-  void logRequest(HttpClientRequest request, String body) {
-    Map headerMap = {};
-    request.headers.forEach((s, l) => headerMap[s] = l);
-
+  void logRequest(String uri, Map<String, String> headers, String body) {
     Map map = {
-      'method': request.method,
-      'uri': request.uri.toString(),
-      'headers': headerMap,
+      'uri': uri,
+      'headers': headers,
       'body': body
     };
 
