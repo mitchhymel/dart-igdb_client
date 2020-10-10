@@ -20,43 +20,39 @@ import 'package:igdb_client/src/igdb_logger.dart';
  */
 class IGDBClient {
   final String clientId;
-  final String clientSecret;
   final String userAgent;
   final IGDBLogger logger;
   
-  IGDBToken token;
+  final String token;
   static const String tokenUrl = 'https://id.twitch.tv/oauth2/token';
 
   static const apiUrl = 'https://api.igdb.com/v4';
 
+  /**
+   * Constructor for IGDBClient. Requires a [userAgent] to be sent with
+   * every request to identify the request. Requires your twitch develeoper
+   * [clientId] and an oauth [token] obtained from twitch or via
+   * [getOauthToken]. Optionally, provide a [logger] to log every request
+   * and response
+   */
+  IGDBClient(this.userAgent, this.clientId, this.token, {this.logger});
 
   /**
-   * The way to get an instance of IGDBClient. Requires a [userAgent] and
-   * Twitch Develeoper [clientId] and [clientSecret] in order to get
-   * an oauth token to auth to IGDB api. Optionally, provide a [logger] to
-   * log all requests and responses
+   * Static helper method to get an oauthToken from the provided Twitch developer [clientId] and
+   * [clientSecret]. This should be called once, you should save the token
+   * somewhere, then use that to instantiate IGDBClient. These expire after
+   * ~60 days, so if you are using IGDBClient and get 401 errors, you should
+   * refresh your token and reinstantiate IGDBClient.
    * 
-   * I use a factory pattern here because of the breaking changes in v4 of
-   * IGDB API where auth is done via oauth (https://api-docs.igdb.com/#breaking-changes).
-   * I wanted to ensure that any IGDBClient created is authenticated, so the 
-   * creation must be async, ergo a factory method over a public constructor.
+   * See full documentation at igdb https://api-docs.igdb.com/#breaking-changes
+   * or twitch https://dev.twitch.tv/docs/authentication.
    */
-  static Future<IGDBClient> create(String userAgent, String clientId,
-    String clientSecret, {IGDBLogger logger}
-  ) async {
-    IGDBToken token = await _refreshToken(clientId, clientSecret);
-    return IGDBClient._private(userAgent, clientId, clientSecret, token, logger: logger);
-  }
-
-  IGDBClient._private(this.userAgent, this.clientId, this.clientSecret, this.token, 
-    {this.logger});
-
-  static Future<IGDBToken> _refreshToken(String clientId, String clientSecret) async {
+  static Future<IGDBToken> getOauthToken(String clientId, String clientSecret) async {
     String url = '$tokenUrl?client_id=$clientId&client_secret=$clientSecret&grant_type=client_credentials';
     var response = await post(url);
     
     if (response.statusCode != 200) {
-      throw new Exception('Attempted to refresh token failed: (${response.statusCode}) ${response.body}');
+      throw new Exception('Attempted to get oauth token failed: (${response.statusCode}) ${response.body}');
     }
 
     Map responseMap = jsonDecode(response.body);
@@ -75,31 +71,16 @@ class IGDBClient {
 
     var headers = {
       'Client-ID': clientId,
-      'Authorization': 'Bearer ${token.accessToken}',
+      'Authorization': 'Bearer ${token}',
       'User-Agent': userAgent,
       'Accept': 'application/json'
     };
 
-    var response = await post(url, headers: headers, body: body);
-
-    // if we failed due to unauthorization, attempt to get a new token and
-    // and try one more time
-    if (response.statusCode == 401) {
-      token = await _refreshToken(clientId, clientSecret);
-
-      headers = {
-        'Client-ID': clientId,
-        'Authorization': 'Bearer ${token.accessToken}',
-        'User-Agent': userAgent,
-        'Accept': 'application/json'
-      };
-
-      response = await post(url, headers: headers, body: body);
-    }
-
     if (logger != null) {
       logger.logRequest(uri.toString(), headers, body);
     }
+
+    var response = await post(url, headers: headers, body: body);
 
     var error = null;
     var data = null;

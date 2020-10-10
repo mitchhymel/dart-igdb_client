@@ -5,7 +5,14 @@ import 'package:igdb_client/igdb_client.dart';
 
 main() async {
 
-  var client = await IGDBClient.create(MY_USER_AGENT, MY_CLIENT_ID, MY_CLIENT_SECRET);
+  // You should only run this once, then save it somewhere. It will eventually
+  // expire after ~60 days, at which point you will need to getOauthToken again
+  // 
+  // The reason for this is that there is a limit of roughly 25 app tokens
+  // active at any time. See https://api-docs.igdb.com/#web-and-mobile-applications
+  var token = await IGDBClient.getOauthToken(MY_CLIENT_ID, MY_CLIENT_SECRET);
+
+  var client = new IGDBClient(MY_USER_AGENT, MY_CLIENT_ID, token.accessToken, logger: IGDBConsoleLogger());
 
   // Find games with 'infamous' in their name and return
   // the results' name and expand their release_dates and platforms.
