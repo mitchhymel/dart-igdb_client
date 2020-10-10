@@ -1,13 +1,26 @@
 # igdb_client
 
-A Dart library for using the IGDB.com API v3
+A Dart library for using the IGDB.com API v4
 https://api-docs.igdb.com/
 
 It is highly recommended to read through the IGDB documentation to understand
 what exactly you can do with the API.
 
-## Limitations
-Premium features (including [IGDB user authentication](https://api-docs.igdb.com/#igdb-authentication)) are not supported and I don't currently have plans to add support for them as I don't have access to these.
+## Usage in Web and Mobile Applications
+
+From the [IGDB documentation on Web and Mobile applications](https://api-docs.igdb.com/#web-and-mobile-applications)
+
+> What?
+> 
+> The IGDB V4 API uses Oauth App Tokens, which aren’t suitable for mobile or frontend-only applications:
+>    * There is a limit of roughly 25 app tokens active at any time
+>    * Tokens expire after roughly 60 days.
+> To help transition to V4, we are providing a quick way to setup a proxy for mobile applications.
+> 
+> How?
+> 
+> Please follow our [proxy](https://api-docs.igdb.com/#proxy) guide!!
+
 
 ## Usage
 
@@ -22,10 +35,7 @@ found below.
 
     import 'package:igdb_client/igdb_client.dart';
 
-    var client = new IGDBClient(
-      'your_user_agent',
-      'your_api_key',
-    );
+    var client = await IGDBClient.create(MY_USER_AGENT, MY_CLIENT_ID, MY_CLIENT_SECRET);
 
     var gamesResponse = await client.games(new IGDBRequestParameters(
       limit: 3

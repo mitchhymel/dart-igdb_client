@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.6
+- Updating to IGDB v4 api with breaking changes to how to get an IGDBClient instance
+- removing endpoints that are no longer available in IGDB v4 api
+
 ## 0.0.5
 - Updating for breaking change in http dependency
 - add support for alpha channel fo rimages
