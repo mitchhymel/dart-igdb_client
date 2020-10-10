@@ -2,12 +2,10 @@ import 'api_key.dart';
 
 import 'package:igdb_client/igdb_client.dart';
 
-var client = new IGDBClient(
-    MY_USER_AGENT,
-    MY_API_KEY,
-);
 
 main() async {
+
+  var client = await IGDBClient.create(MY_USER_AGENT, MY_CLIENT_ID, MY_CLIENT_SECRET);
 
   // Find games with 'infamous' in their name and return
   // the results' name and expand their release_dates and platforms.

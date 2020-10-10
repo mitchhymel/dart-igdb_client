@@ -2,6 +2,7 @@ import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:igdb_client/src/enums/enums.dart';
+import 'package:igdb_client/src/igdb_token.dart';
 import 'package:igdb_client/src/request_parameters.dart';
 import 'package:igdb_client/src/igdb_response.dart';
 import 'package:igdb_client/src/igdb_logger.dart';
@@ -12,22 +13,55 @@ import 'package:igdb_client/src/igdb_logger.dart';
  * See IGDB's documentation of their API at https://api-docs.igdb.com/.
  * There you'll find more details on how to interact with their API, as well
  * as the structure of response objects.
+ * 
+ * Note: As of the v4 API, this is not meant to be used directly within web
+ * or mobile applications. IGDB recommends instead using a proxy.
+ * See latest documentation at: https://api-docs.igdb.com/#web-and-mobile-applications
  */
 class IGDBClient {
-
-  final String apiKey;
+  final String clientId;
+  final String clientSecret;
   final String userAgent;
-  final String apiUrl = "https://api-v3.igdb.com";
   final IGDBLogger logger;
+  
+  IGDBToken token;
+  static const String tokenUrl = 'https://id.twitch.tv/oauth2/token';
+
+  static const apiUrl = 'https://api.igdb.com/v4';
+
 
   /**
-   * Constructor. Requires a [userAgent] and [apiKey].
+   * The way to get an instance of IGDBClient. Requires a [userAgent] and
+   * Twitch Develeoper [clientId] and [clientSecret] in order to get
+   * an oauth token to auth to IGDB api. Optionally, provide a [logger] to
+   * log all requests and responses
    * 
-   * If you want to log all requests and responses, override
-   * [IGDBLogger] and provide an instance as [this.logger]
+   * I use a factory pattern here because of the breaking changes in v4 of
+   * IGDB API where auth is done via oauth (https://api-docs.igdb.com/#breaking-changes).
+   * I wanted to ensure that any IGDBClient created is authenticated, so the 
+   * creation must be async, ergo a factory method over a public constructor.
    */
-  IGDBClient(this.userAgent, this.apiKey,
-      {this.logger}) {}
+  static Future<IGDBClient> create(String userAgent, String clientId,
+    String clientSecret, {IGDBLogger logger}
+  ) async {
+    IGDBToken token = await _refreshToken(clientId, clientSecret);
+    return IGDBClient._private(userAgent, clientId, clientSecret, token, logger: logger);
+  }
+
+  IGDBClient._private(this.userAgent, this.clientId, this.clientSecret, this.token, 
+    {this.logger});
+
+  static Future<IGDBToken> _refreshToken(String clientId, String clientSecret) async {
+    String url = '$tokenUrl?client_id=$clientId&client_secret=$clientSecret&grant_type=client_credentials';
+    var response = await post(url);
+    
+    if (response.statusCode != 200) {
+      throw new Exception('Attempted to refresh token failed: (${response.statusCode}) ${response.body}');
+    }
+
+    Map responseMap = jsonDecode(response.body);
+    return IGDBToken.fromMap(responseMap);
+  }
 
   /**
    * Makes a POST request to the [url] with provided [body].
@@ -38,28 +72,40 @@ class IGDBClient {
    */
   Future<IGDBResponse> makeRequest(String url, String body) async {
     var uri = Uri.parse(url);
-    
+
     var headers = {
-      'user-key': apiKey,
+      'Client-ID': clientId,
+      'Authorization': 'Bearer ${token.accessToken}',
       'User-Agent': userAgent,
       'Accept': 'application/json'
     };
+
+    var response = await post(url, headers: headers, body: body);
+
+    // if we failed due to unauthorization, attempt to get a new token and
+    // and try one more time
+    if (response.statusCode == 401) {
+      token = await _refreshToken(clientId, clientSecret);
+
+      headers = {
+        'Client-ID': clientId,
+        'Authorization': 'Bearer ${token.accessToken}',
+        'User-Agent': userAgent,
+        'Accept': 'application/json'
+      };
+
+      response = await post(url, headers: headers, body: body);
+    }
 
     if (logger != null) {
       logger.logRequest(uri.toString(), headers, body);
     }
 
-    var response = await post(url, 
-      headers: headers,
-      body: body
-    );
-
     var error = null;
     var data = null;
     if (response.statusCode != 200) {
       error = json.decode(response.body);
-    }
-    else {
+    } else {
       data = json.decode(response.body);
     }
 
@@ -80,29 +126,24 @@ class IGDBClient {
    * an [IDGBEndpoints] enum for it.
    */
   Future<IGDBResponse> requestByPath(
-    String path, IGDBRequestParameters params) async {
+      String path, IGDBRequestParameters params) async {
     return await makeRequest("${apiUrl}/$path", params.toBody());
   }
 
   Future<IGDBResponse> _requestByEndpoint(
-    IGDBEndpoints endpoint, IGDBRequestParameters params) async {
-    return await makeRequest("${apiUrl}/${endpoint.toString()}", params.toBody());
-  }
-
-  Future<IGDBResponse> achievements(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.ACHIEVEMENTS, params);
-  }
-
-  Future<IGDBResponse> achievement_icons(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.ACHIEVEMENT_ICONS, params);
+      IGDBEndpoints endpoint, IGDBRequestParameters params) async {
+    return await makeRequest(
+        "${apiUrl}/${endpoint.toString()}", params.toBody());
   }
 
   Future<IGDBResponse> ageRatings(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.AGE_RATINGS, params);
   }
 
-  Future<IGDBResponse> ageRatingContentDescriptions(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.AGE_RATING_CONTENT_DESCRIPTIONS, params);
+  Future<IGDBResponse> ageRatingContentDescriptions(
+      IGDBRequestParameters params) async {
+    return await _requestByEndpoint(
+        IGDBEndpoints.AGE_RATING_CONTENT_DESCRIPTIONS, params);
   }
 
   Future<IGDBResponse> alternativeNames(IGDBRequestParameters params) async {
@@ -141,16 +182,8 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.COVERS, params);
   }
 
-  Future<IGDBResponse> credits(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.CREDITS, params);
-  }
-
   Future<IGDBResponse> externalGames(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.EXTERNAL_GAMES, params);
-  }
-
-  Future<IGDBResponse> feeds(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.FEEDS, params);
   }
 
   Future<IGDBResponse> franchises(IGDBRequestParameters params) async {
@@ -182,11 +215,14 @@ class IGDBClient {
   }
 
   Future<IGDBResponse> gameVersionFeatures(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.GAME_VERSION_FEATURES, params);
+    return await _requestByEndpoint(
+        IGDBEndpoints.GAME_VERSION_FEATURES, params);
   }
 
-  Future<IGDBResponse> gameVersionFeatureValues(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.GAME_VERSION_FEATURE_VALUES, params);
+  Future<IGDBResponse> gameVersionFeatureValues(
+      IGDBRequestParameters params) async {
+    return await _requestByEndpoint(
+        IGDBEndpoints.GAME_VERSION_FEATURE_VALUES, params);
   }
 
   Future<IGDBResponse> genres(IGDBRequestParameters params) async {
@@ -205,26 +241,6 @@ class IGDBClient {
     return await _requestByEndpoint(IGDBEndpoints.MULTIPLAYER_MODES, params);
   }
 
-  Future<IGDBResponse> pages(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PAGES, params);
-  }
-
-  Future<IGDBResponse> pageBackgrounds(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PAGE_BACKGROUNDS, params);
-  }
-  
-  Future<IGDBResponse> pageLogos(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PAGE_LOGOS, params);
-  }
-  
-  Future<IGDBResponse> pageWebsites(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PAGE_WEBSITES, params);
-  }
-
-  Future<IGDBResponse> people(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PEOPLE, params);
-  }
-
   Future<IGDBResponse> platforms(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLATFORMS, params);
   }
@@ -232,19 +248,23 @@ class IGDBClient {
   Future<IGDBResponse> platformLogos(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLATFORM_LOGOS, params);
   }
-  
+
   Future<IGDBResponse> platformVersions(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLATFORM_VERSIONS, params);
   }
-  
-  Future<IGDBResponse> platformVersionCompanies(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_VERSION_COMPANIES, params);
+
+  Future<IGDBResponse> platformVersionCompanies(
+      IGDBRequestParameters params) async {
+    return await _requestByEndpoint(
+        IGDBEndpoints.PLATFORM_VERSION_COMPANIES, params);
   }
-  
-  Future<IGDBResponse> platformVersionReleaseDates(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PLATFORM_VERSION_RELEASE_DATES, params);
+
+  Future<IGDBResponse> platformVersionReleaseDates(
+      IGDBRequestParameters params) async {
+    return await _requestByEndpoint(
+        IGDBEndpoints.PLATFORM_VERSION_RELEASE_DATES, params);
   }
-  
+
   Future<IGDBResponse> platformWebsites(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLATFORM_WEBSITES, params);
   }
@@ -252,33 +272,9 @@ class IGDBClient {
   Future<IGDBResponse> playerPerspectives(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.PLAYER_PERSPECTIVES, params);
   }
-  
-  Future<IGDBResponse> productFamilies(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PRODUCT_FAMILIES, params);
-  }
-
-  Future<IGDBResponse> pulses(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PULSES, params);
-  }
-
-  Future<IGDBResponse> pulseGroups(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PULSE_GROUPS, params);
-  }
-
-  Future<IGDBResponse> pulseSources(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PULSE_SOURCES, params);
-  }
-
-  Future<IGDBResponse> pulseUrls(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.PULSE_URLS, params);
-  }
 
   Future<IGDBResponse> releaseDates(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.RELEASE_DATES, params);
-  }
-
-  Future<IGDBResponse> reviews(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.REVIEWS, params);
   }
 
   Future<IGDBResponse> search(IGDBRequestParameters params) async {
@@ -287,14 +283,6 @@ class IGDBClient {
 
   Future<IGDBResponse> themes(IGDBRequestParameters params) async {
     return await _requestByEndpoint(IGDBEndpoints.THEMES, params);
-  }
-
-  Future<IGDBResponse> timeToBeats(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.TIME_TO_BEATS, params);
-  }
-
-  Future<IGDBResponse> titles(IGDBRequestParameters params) async {
-    return await _requestByEndpoint(IGDBEndpoints.TITLES, params);
   }
 
   Future<IGDBResponse> websites(IGDBRequestParameters params) async {
