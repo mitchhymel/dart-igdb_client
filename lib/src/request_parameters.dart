@@ -1,11 +1,11 @@
 class IGDBRequestParameters {
-  final String filters; // https://api-docs.igdb.com/#filters
-  final List<int> ids;
-  final List<String> fields;
-  final int limit;
-  final String order; // https://api-docs.igdb.com/#sorting
-  final String search;
-  final int offset; // https://api-docs.igdb.com/#pagination
+  final String? filters; // https://api-docs.igdb.com/#filters
+  final List<int>? ids;
+  final List<String>? fields;
+  final int? limit;
+  final String? order; // https://api-docs.igdb.com/#sorting
+  final String? search;
+  final int? offset; // https://api-docs.igdb.com/#pagination
 
   const IGDBRequestParameters({
     this.filters,
@@ -18,13 +18,13 @@ class IGDBRequestParameters {
   });
 
   IGDBRequestParameters copyWith({
-    String filters,
-    List<int> ids,
-    List<String> fields,
-    int limit,
-    String order,
-    String search,
-    int offset
+    String? filters,
+    List<int>? ids,
+    List<String>? fields,
+    int? limit,
+    String? order,
+    String? search,
+    int? offset
   }) {
     return new IGDBRequestParameters(
       filters: filters ?? this.filters,
@@ -44,18 +44,18 @@ class IGDBRequestParameters {
       result += 'search "$search";';
     }
 
-    if (fields != null && fields.length > 0) {
-      result += 'fields ${fields.join(',')};';
+    if (fields != null && fields!.length > 0) {
+      result += 'fields ${fields!.join(',')};';
     }
     else {
       result += 'fields *;';
     }
 
-    if (ids != null && ids.length > 0) {
-      result += 'where id = (${ids.join(',')});';
+    if (ids != null && ids!.length > 0) {
+      result += 'where id = (${ids!.join(',')});';
     }
 
-    if (filters != null && filters.length > 0) {
+    if (filters != null && filters!.length > 0) {
       result += 'where $filters;';
     }
 
@@ -63,11 +63,11 @@ class IGDBRequestParameters {
       result += 'sort $order;';
     }
 
-    if (limit != null && limit > 0) {
+    if (limit != null && limit! > 0) {
       result += 'limit $limit;';
     }
 
-    if (offset != null && offset > 0) {
+    if (offset != null && offset! > 0) {
       result += 'offset $offset;';
     }
 

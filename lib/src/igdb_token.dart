@@ -2,9 +2,9 @@ import 'dart:convert';
 
 class IGDBToken {
 
-  final String accessToken;
-  final int expiresIn;
-  final String tokenType;
+  final String? accessToken;
+  final int? expiresIn;
+  final String? tokenType;
 
   IGDBToken({this.accessToken, this.expiresIn, this.tokenType});
 
