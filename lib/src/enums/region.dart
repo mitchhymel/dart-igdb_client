@@ -1,7 +1,7 @@
 
 class IGDBRegions {
   final String name;
-  final int id;
+  final int? id;
   const IGDBRegions._private(this.name, this.id);
 
   static const int _europeId = 1;
@@ -34,7 +34,7 @@ class IGDBRegions {
     _worldwideId: WORLDWIDE
   };
 
-  static IGDBRegions fromInt(int id) {
+  static IGDBRegions? fromInt(int id) {
     if (id == null) {
       return WORLDWIDE;
     }

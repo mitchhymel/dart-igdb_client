@@ -1,6 +1,4 @@
-
 class IGDBPlatforms {
-
   final String name;
   final int id;
   const IGDBPlatforms._private(this.name, this.id);
@@ -60,7 +58,8 @@ class IGDBPlatforms {
   static const IGDBPlatforms MAC = const IGDBPlatforms._private('Mac', _macId);
   static const IGDBPlatforms COMMODORE_C64 = const IGDBPlatforms._private('Commodore C64/128', _commodoreId);
   static const IGDBPlatforms NES = const IGDBPlatforms._private('Nintendo Entertainment System (NES)', _nesId);
-  static const IGDBPlatforms SUPER_NINTENDO = const IGDBPlatforms._private('Super Nintendo Entertainment System (SNES)', _snesId);
+  static const IGDBPlatforms SUPER_NINTENDO =
+      const IGDBPlatforms._private('Super Nintendo Entertainment System (SNES)', _snesId);
   static const IGDBPlatforms DS = const IGDBPlatforms._private('Nintendo DS', _dsId);
   static const IGDBPlatforms GAMECUBE = const IGDBPlatforms._private('Nintendo Gamecube', _gamecubeId);
   static const IGDBPlatforms GAMEBOY_COLOR = const IGDBPlatforms._private('Game Boy Color', _gbcId);
@@ -82,7 +81,8 @@ class IGDBPlatforms {
   static const IGDBPlatforms VIRTUAL_CONSOLE = const IGDBPlatforms._private('Virtual Console (Nintendo)', _vcId);
   static const IGDBPlatforms PLAYSTATION_4 = const IGDBPlatforms._private('Playstation 4', _ps4Id);
   static const IGDBPlatforms XBOX_ONE = const IGDBPlatforms._private('Xbox One', _xboxOneId);
-  static const IGDBPlatforms FAMILY_COMPUTER_DISK_SYSTEM = const IGDBPlatforms._private('Family Computer Disk System', _familyComputerDiskId);
+  static const IGDBPlatforms FAMILY_COMPUTER_DISK_SYSTEM =
+      const IGDBPlatforms._private('Family Computer Disk System', _familyComputerDiskId);
   static const IGDBPlatforms SWITCH = const IGDBPlatforms._private('Switch', _switchId);
   static const IGDBPlatforms ESHOP = const IGDBPlatforms._private('Nintendo eShop', _nintendoEshopId);
   static const IGDBPlatforms STEAMVR = const IGDBPlatforms._private('SteamVR', _steamVrId);
@@ -117,15 +117,11 @@ class IGDBPlatforms {
     _switchId: SWITCH,
   };
 
-  static IGDBPlatforms fromInt(int id) {
-    return _map[id] ?? NONE;
+  static IGDBPlatforms fromInt(int? id) {
+    return _map[id!] ?? NONE;
   }
 
   static List<IGDBPlatforms> listFromMapList(List maps) {
-    if (maps == null) {
-      return new List<IGDBPlatforms>();
-    }
-
     return maps.map((m) => IGDBPlatforms.fromInt(m['id'])).toList();
   }
 

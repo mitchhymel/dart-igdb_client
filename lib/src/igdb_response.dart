@@ -17,7 +17,7 @@ class IGDBResponse {
    * Object containing the resulting objects returned from IGDB's API. Will 
    * be null if the request encountered an error.
    */
-  final List<dynamic> data;
+  final List<dynamic>? data;
 
   IGDBResponse(this.status, this.error, this.data);
 

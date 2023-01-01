@@ -1,4 +1,3 @@
-
 class IGDBGenres {
   final String name;
   final int id;
@@ -45,7 +44,7 @@ class IGDBGenres {
   static const IGDBGenres ADVENTURE = const IGDBGenres._private('Adventure', _adventureId);
   static const IGDBGenres INDIE = const IGDBGenres._private('Indie', _indieId);
   static const IGDBGenres ARCADE = const IGDBGenres._private('Arcade', _arcadeId);
-  
+
   static const IGDBGenres NONE = const IGDBGenres._private('None', 0);
 
   static const Map<int, IGDBGenres> _map = const {
@@ -70,15 +69,11 @@ class IGDBGenres {
     _rpgId: ROLE_PLAYING_GAME
   };
 
-  static IGDBGenres fromInt(int id) {
-    return _map[id] ?? NONE;
+  static IGDBGenres fromInt(int? id) {
+    return _map[id!] ?? NONE;
   }
 
   static List<IGDBGenres> listFromMapList(List maps) {
-    if (maps == null) {
-      return new List<IGDBGenres>();
-    }
-
     return maps.map((m) => IGDBGenres.fromInt(m['id'])).toList();
   }
 }

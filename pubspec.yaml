@@ -4,7 +4,7 @@ version: 0.0.7
 homepage: https://github.com/mitchhymel/dart-igdb_client
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  http: ^0.12.2
+  http: ^0.13.5
